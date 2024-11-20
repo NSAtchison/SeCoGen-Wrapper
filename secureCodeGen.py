@@ -4,6 +4,8 @@ import google.generativeai as genai
 import re
 import pandas as pd
 import os
+from bandit_analysis.result_analysis import result_analysis
+from bandit_analysis.gen_py_script import generate_python_script
 
 class SecureCodeGen():
     def __init__(self, api_key, model_type="gemini-1.5-flash"):
@@ -11,7 +13,7 @@ class SecureCodeGen():
 
         self.model = genai.GenerativeModel(model_type)
 
-        self.draft_file = "draft.py"
+        self.draft_file = "gpt_output.py"
 
         self.secure_prompt = "\nMake sure to make the code free from security vulnerabilities. Please only return code."
         self.regenerate_prompt = "\nRewrite this code to fix the errors mentioned in the error report."
@@ -70,8 +72,8 @@ class SecureCodeGen():
         match = re.search(r"```python\n(.*?)```", text, re.DOTALL)
 
         if match:
-            code = match.group(1)
-            return
+            return match.group(1)
+            
 
     # This function creates the initial Bandit report to be analyzed
     # Input: code_filename: This is the file name for the python code that we want a Bandit report on
@@ -84,10 +86,12 @@ class SecureCodeGen():
         response1 = self.call_llm(prompt + self.secure_prompt)
         draft_code = self.parse_code(response1)
 
-        with open(self.draft_file, "w") as file:
-            file.write(draft_code)
+        # with open(f"bandit_analysis/{self.draft_file}", "w") as file:
+        #     file.write(draft_code)
+        generate_python_script(draft_code)
 
         # TODO: Pass response1 to Bandit
+        result_analysis(self.draft_file)
 
         # TODO: Pass response1, Bandit report, and LLM report to llm
         # NOTE: We should be checking if Bandit reports no issues, if so prob don't need to rewrite code.

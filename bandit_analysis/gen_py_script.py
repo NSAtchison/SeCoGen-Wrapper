@@ -1,5 +1,5 @@
 import os
-import Result_Analysis
+# import Result_Analysis
 
 GPT_PY_FILE_NAME = "gpt_output.py"
 
@@ -24,8 +24,8 @@ def run_analysis():
     Sets the python_code_filename of Result_Analysis then
     performs the bandit code analysis.
     """
-    Result_Analysis.python_code_filename = GPT_PY_FILE_NAME
-    Result_Analysis.result_analysis()
+    # Result_Analysis.python_code_filename = GPT_PY_FILE_NAME
+    # Result_Analysis.result_analysis()
 
 if __name__ == "__main__":
     generate_python_script("print(\"Hello World!\")")
