@@ -1,10 +1,5 @@
-# importing pandas and os modules
+# importing pandas module
 import pandas as pd
-import os
-
-# These are the file names for the bandit report and the python code given by ChatGPT.
-# These can be adjusted here and work everywhere else
-# BANDIT_REPORT_FILE_NAME = "results.csv"
 
 # This is a Dictionary that has the Issue codes as keys and the desired prompt to be used as the values
 code_dict = {
@@ -79,19 +74,19 @@ def codes_to_issues(unique_codes):
 # This function will create the final prompt that we want to return to ChatGPT for the second iteration
 # Input: issue_prompts: This is the list of all prompts we want ChatGPT to be aware of when generating code
 # Output: The final prompt that ChatGPT will use when generating code will be created and returned
-def create_prompt(issue_prompts):
-    # base_prompt = "Rewrite the attached code with the following in mind: "
-    # prompt = ""
-    # issues
-    # if len(issue_prompts) > 0:
-    for prompt in issue_prompts:
-        base_prompt += prompt + ". "
-    # else:
-    #     # If bandit found no issues, we don't need to re-prompt.
-    #     return ""
-    # base_prompt += "Ensure the best possible security while writing the code."
-    # base_prompt += "Additionally, write a detailed report about the security of the code you generate."
-    return base_prompt
+# def create_prompt(issue_prompts):
+#     # base_prompt = "Rewrite the attached code with the following in mind: "
+#     # prompt = ""
+#     # issues
+#     # if len(issue_prompts) > 0:
+#     for prompt in issue_prompts:
+#         base_prompt += prompt + ". "
+#     # else:
+#     #     # If bandit found no issues, we don't need to re-prompt.
+#     #     return ""
+#     # base_prompt += "Ensure the best possible security while writing the code."
+#     # base_prompt += "Additionally, write a detailed report about the security of the code you generate."
+#     return base_prompt
 
 def result_analysis(bandit_file_path):
     # dir = os.path.realpath(os.path.dirname(__file__))
