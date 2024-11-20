@@ -20,7 +20,8 @@ class SecureCodeGen():
         self.draft_file = "gpt_output.py"
 
         self.secure_prompt = "\nMake sure to make the code free from security vulnerabilities. Please only return code."
-        self.regenerate_prompt = "\nRewrite this code to fix the errors mentioned in the error report."
+        self.regenerate_prompt = ("\nRewrite this code: {code} to fix these"
+                                  "issues: {issues}.")
 
         self.warning_message = "# ===== LLM GENERATED CODE - USE WITH CAUTION ====="
 
@@ -100,18 +101,30 @@ class SecureCodeGen():
 
     def generate(self, prompt):
         response1 = self.call_llm(prompt + self.secure_prompt)
-        draft_code = self.parse_code(response1)
+        pass_1_code = self.parse_code(response1)
 
-        self.generate_python_script(PASS_1_PY_FILE_NAME, draft_code)
+        self.generate_python_script(PASS_1_PY_FILE_NAME, pass_1_code)
 
         dir = os.path.realpath(os.path.dirname(__file__))
         bandit_report_file_path = f"{dir}/{PASS_1_BANDIT_REPORT_FILE_NAME}"
         self.create_bandit_report(PASS_1_PY_FILE_NAME, bandit_report_file_path)
 
-        # TODO: Pass response1 to Bandit
-        result_analysis(bandit_report_file_path)
+        issues = result_analysis(bandit_report_file_path)
 
-        # TODO: Pass response1, Bandit report, and LLM report to llm
-        # NOTE: We should be checking if Bandit reports no issues, if so prob don't need to rewrite code.
+        # If no issues were found, we do not need to re-prompt.
+        if issues:
+            response2 = self.call_llm(self.regenerate_prompt.format(
+                code=response1,
+                issues=issues
+            ))
+
+            print(response2)
+
+            pass_2_code = self.parse_code(response2)
+
+            self.generate_python_script(PASS_1_PY_FILE_NAME, pass_2_code)
+
+            bandit_report_file_path = f"{dir}/{PASS_2_BANDIT_REPORT_FILE_NAME}"
+            self.create_bandit_report(PASS_2_PY_FILE_NAME, bandit_report_file_path)
 
         # TODO: Report code output, and reports

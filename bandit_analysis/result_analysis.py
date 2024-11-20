@@ -80,11 +80,17 @@ def codes_to_issues(unique_codes):
 # Input: issue_prompts: This is the list of all prompts we want ChatGPT to be aware of when generating code
 # Output: The final prompt that ChatGPT will use when generating code will be created and returned
 def create_prompt(issue_prompts):
-    base_prompt = "Rewrite the attached code with the following in mind: "
-    if len(issue_prompts) > 0:
-        for prompt in issue_prompts:
-            base_prompt += prompt + ". "
-    base_prompt += "Ensure the best possible security while writing the code."
+    # base_prompt = "Rewrite the attached code with the following in mind: "
+    # prompt = ""
+    # issues
+    # if len(issue_prompts) > 0:
+    for prompt in issue_prompts:
+        base_prompt += prompt + ". "
+    # else:
+    #     # If bandit found no issues, we don't need to re-prompt.
+    #     return ""
+    # base_prompt += "Ensure the best possible security while writing the code."
+    # base_prompt += "Additionally, write a detailed report about the security of the code you generate."
     return base_prompt
 
 def result_analysis(bandit_file_path):
@@ -92,6 +98,6 @@ def result_analysis(bandit_file_path):
     # bandit_file_path = f"{dir}/{BANDIT_REPORT_FILE_NAME}"
     # create_bandit_report(code_filename, bandit_file_path)
     codes = find_issue_code(bandit_file_path)
-    prompts = codes_to_issues(codes)
-    return create_prompt(prompts)
+    issues = codes_to_issues(codes)
+    return issues
 

@@ -1,5 +1,5 @@
 __pycache__
-bandit_results_pass_1
-bandit_results_pass_2
+bandit_results_pass_1.csv
+bandit_results_pass_2.csv
 gemini_output_pass_1.py
 gemini_output_pass_2.py
