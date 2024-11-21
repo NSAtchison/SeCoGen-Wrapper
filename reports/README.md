@@ -1,0 +1,1 @@
+## This folder is where reports will be generated.
