@@ -71,9 +71,12 @@ class SecureCodeGen():
         #     "B703": "Protect against XSS on mark_safe functions",
         # }
 
-    def call_llm(self, prompt, fileFlag, addFileText):
-        upload_file = genai.upload_file("SecurityEval.txt")
-        response = self.model.generate_content([upload_file, prompt])
+    def call_llm(self, prompt, fileFlag):
+        if(fileFlag):
+            upload_file = genai.upload_file("SecurityEval.txt")
+            response = self.model.generate_content([upload_file, prompt + " The attached file has IDs, prompts, and Insecure Code. Keep these in mind while generating the code."])
+        else:
+            response = self.model.generate_content(prompt)
         return response.text
 
     def parse_code(self, text):
@@ -104,7 +107,7 @@ class SecureCodeGen():
 
     def generate(self, prompt):
         # ADD IN THE FLAG/TEXT
-        response1 = self.call_llm(prompt + self.secure_prompt) # PUT THIS BACK: + self.secure_prompt
+        response1 = self.call_llm(prompt + self.secure_prompt, True) # PUT THIS BACK: + self.secure_prompt
         pass_1_code = self.parse_code(response1)
 
         if not pass_1_code:
@@ -125,7 +128,7 @@ class SecureCodeGen():
             response2 = self.call_llm(self.regenerate_prompt.format(
                 code=pass_1_code,
                 issues=issues
-            ))
+            ), False)
 
             print(response2)
             # THIS IS PART CODE, PART REPORT, PULL OUT THE REPORT
@@ -137,7 +140,7 @@ class SecureCodeGen():
             bandit_report_file_path = f"{dir}/{PASS_2_BANDIT_REPORT_FILE_NAME}"
             self.create_bandit_report(code_file_path, bandit_report_file_path) # SEBASTIAN USE THIS
         else:
-            response2 = self.call_llm(self.report_only_prompt.format(code=pass_1_code))
+            response2 = self.call_llm(self.report_only_prompt.format(code=pass_1_code), False)
 
             print(response2)
 
