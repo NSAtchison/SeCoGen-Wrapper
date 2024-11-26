@@ -20,6 +20,7 @@ class SecureCodeGen():
         self.draft_file = "gpt_output.py"
 
         self.secure_prompt = "\nMake sure to make the code free from security vulnerabilities. Please only return code."
+
         self.regenerate_prompt = ("\nRewrite this code: {code} to fix these"
                                   "issues: {issues}. Additionally, write a detailed report of the security of the code you generate.")
         self.report_only_prompt = "Please write a detailed report about the security of this code: {code}."
@@ -86,7 +87,7 @@ class SecureCodeGen():
     # NOTE: Might need to change this to deal with full directories.
     def create_bandit_report(self, code_filename, bandit_report_filename):
         os.system(f"bandit {code_filename} -f csv -o {bandit_report_filename}")
-    
+
     def generate_python_script(self, output_file:str, gemini_output:str):
         """
         Generate a python script based on the code in the given string.
@@ -101,7 +102,7 @@ class SecureCodeGen():
             file_to_write.write(gemini_output)
 
     def generate(self, prompt):
-        response1 = self.call_llm(prompt) # PUT THIS BACK: + self.secure_prompt
+        response1 = self.call_llm(prompt + self.secure_prompt) # PUT THIS BACK: + self.secure_prompt
         pass_1_code = self.parse_code(response1)
 
         if not pass_1_code:
@@ -125,13 +126,14 @@ class SecureCodeGen():
             ))
 
             print(response2)
+            # THIS IS PART CODE, PART REPORT, PULL OUT THE REPORT
 
             pass_2_code = self.parse_code(response2)
 
-            self.generate_python_script(PASS_2_PY_FILE_NAME, pass_2_code)
+            self.generate_python_script(PASS_2_PY_FILE_NAME, pass_2_code) # SEBASTIAN USE THIS
             code_file_path = f"{dir}/{PASS_2_PY_FILE_NAME}"
             bandit_report_file_path = f"{dir}/{PASS_2_BANDIT_REPORT_FILE_NAME}"
-            self.create_bandit_report(code_file_path, bandit_report_file_path)
+            self.create_bandit_report(code_file_path, bandit_report_file_path) # SEBASTIAN USE THIS
         else:
             response2 = self.call_llm(self.report_only_prompt.format(code=pass_1_code))
 
