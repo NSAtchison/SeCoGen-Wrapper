@@ -70,8 +70,9 @@ class SecureCodeGen():
         #     "B703": "Protect against XSS on mark_safe functions",
         # }
 
-    def call_llm(self, prompt):
-        response = self.model.generate_content(prompt)
+    def call_llm(self, prompt, fileFlag, addFileText):
+        upload_file = genai.upload_file("SecurityEval.txt")
+        response = self.model.generate_content([upload_file, prompt])
         return response.text
 
     def parse_code(self, text):
@@ -101,6 +102,7 @@ class SecureCodeGen():
             file_to_write.write(gemini_output)
 
     def generate(self, prompt):
+        # ADD IN THE FLAG/TEXT
         response1 = self.call_llm(prompt) # PUT THIS BACK: + self.secure_prompt
         pass_1_code = self.parse_code(response1)
 
