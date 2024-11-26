@@ -1,0 +1,89 @@
+```python
+import hashlib
+import getpass
+import os
+
+# Securely store the password hash.  In a real application, this would be in a database.
+#  For this example, we'll use an environment variable.  NEVER do this in production!
+PASSWORD_HASH = os.environ.get("PASSWORD_HASH")
+
+# If the environment variable isn't set, exit with an error
+if not PASSWORD_HASH:
+    print("Error: PASSWORD_HASH environment variable not set.")
+    exit(1)
+
+
+def check_password(username, password):
+    # Check if username matches (in a real system, this would be a database lookup)
+    if username != "admin":
+        return False
+
+    # Hash the input password and compare to the stored hash
+    salt, stored_hash = PASSWORD_HASH.split('$', 1)  #assuming salt and hash separated by $
+    salted_password = salt + password
+    hashed_password = hashlib.sha256(salted_password.encode()).hexdigest()
+
+    return hashed_password == stored_hash
+
+def main():
+    username = input("Username: ")
+    password = getpass.getpass("Password: ")
+
+    if check_password(username, password):
+        print("Login successful!")
+    else:
+        print("Login failed.")
+
+if __name__ == "__main__":
+    main()
+
+```
+
+**To use this code:**
+
+1. **Generate a secure salt and hash:** Before running, you MUST generate a secure salt and hash for the password "password".  Use a strong random salt (at least 16 characters) and a strong hashing algorithm like SHA-256 (as used above).  Example using Python:
+
+```python
+import hashlib
+import os
+import base64
+
+password = "password"
+salt = base64.b64encode(os.urandom(16)).decode('utf-8') # Generate a random salt
+salted_password = salt + password
+hashed_password = hashlib.sha256(salted_password.encode()).hexdigest()
+PASSWORD_HASH = f"{salt}${hashed_password}"
+print(f"Set the environment variable PASSWORD_HASH to: {PASSWORD_HASH}")
+```
+
+
+2. **Set the environment variable:** Set the `PASSWORD_HASH` environment variable to the output from step 1.  How you do this depends on your operating system (e.g.,  `export PASSWORD_HASH="..."` on Linux/macOS, `set PASSWORD_HASH="..."` on Windows).
+
+
+**Security Report:**
+
+The original code had a critical vulnerability: the password was hardcoded. The revised code addresses this by:
+
+* **Hashing the password:**  The password is now hashed using SHA-256 before comparison.  This means that even if the database is compromised, the actual password isn't revealed; only the hash is exposed.  Recovering the password from the hash is computationally infeasible.
+
+* **Salting the password:** A randomly generated salt is prepended to the password *before* hashing. This is crucial because it prevents rainbow table attacks – pre-computed tables of password hashes.  Each user gets a unique salt, making rainbow tables ineffective.
+
+* **Storing the hash securely (in this example, using an environment variable):** The hash is stored in the `PASSWORD_HASH` environment variable.  **However, this is for demonstration purposes ONLY.** In a production environment, passwords should NEVER be stored in environment variables.  Instead, they should be stored in a secure, encrypted database with appropriate access controls.
+
+* **Username Verification:** The code still performs a simple username check.  In a real-world scenario, this would involve querying a database to verify the username and retrieve the corresponding password hash.
+
+**Remaining Security Considerations:**
+
+* **Database Security:**  The biggest remaining security risk is the method of storing the password hash.  A real application *must* use a robust database with strong encryption at rest and in transit.
+
+* **Input Validation:**  The code lacks input validation.  It should check for SQL injection vulnerabilities (if used with a database) and other attacks.
+
+* **Rate Limiting:** Implement rate limiting to prevent brute-force attacks.
+
+* **HTTPS:**  If this authentication is used in a web application, HTTPS is absolutely essential.
+
+* **Stronger Password Policies:** Enforce strong password policies, including length, complexity requirements, and regular password changes.
+
+* **Session Management:**  For web applications, proper session management is critical to prevent session hijacking.
+
+In short, while the improved code is significantly more secure than the original, it's still a simplified example.  Building a truly secure authentication system requires careful consideration of many more factors.  Using established libraries and frameworks designed for authentication will greatly improve security.
