@@ -1,7 +1,20 @@
-## Title of Application for Secure Gemini Prompting
+# Title of Application for Secure Gemini Prompting
 
-# Prerequisites:
+## Prerequisites:
+Generate a Google Gemini API key at the link below, and store as an environment variable titled GEMINI_API_KEY.
+
+```
+https://ai.google.dev/api?lang=python
+'''
 
 ```
 pip install -q -U google-generativeai
+```
+
+```
+pip install bandit
+```
+
+```
+pip install pandas
 ```
