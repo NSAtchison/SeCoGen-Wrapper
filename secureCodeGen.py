@@ -21,7 +21,8 @@ class SecureCodeGen():
 
         self.secure_prompt = "\nMake sure to make the code free from security vulnerabilities. Please only return code."
         self.regenerate_prompt = ("\nRewrite this code: {code} to fix these"
-                                  "issues: {issues}.")
+                                  "issues: {issues}. Additionally, write a detailed report of the security of the code you generate.")
+        self.report_only_prompt = "Please write a detailed report about the security of this code: {code}."
 
         self.warning_message = "# ===== LLM GENERATED CODE - USE WITH CAUTION ====="
 
@@ -119,7 +120,7 @@ class SecureCodeGen():
         # If no issues were found, we do not need to re-prompt.
         if issues:
             response2 = self.call_llm(self.regenerate_prompt.format(
-                code=response1,
+                code=pass_1_code,
                 issues=issues
             ))
 
@@ -131,6 +132,10 @@ class SecureCodeGen():
             code_file_path = f"{dir}/{PASS_2_PY_FILE_NAME}"
             bandit_report_file_path = f"{dir}/{PASS_2_BANDIT_REPORT_FILE_NAME}"
             self.create_bandit_report(code_file_path, bandit_report_file_path)
+        else:
+            response2 = self.call_llm(self.report_only_prompt.format(code=pass_1_code))
+
+            print(response2)
 
         # TODO: Report code output, and reports
         # response 2 is printed, figure out how to get its 'security report' and put it in a file.
