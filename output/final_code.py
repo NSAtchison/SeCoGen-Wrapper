@@ -1,53 +1,53 @@
 import hashlib
 import getpass
-import os
+import json
 
-def get_password_hash(filename="password.hash"):
-    """Retrieves the password hash from a file.  Creates the file if it doesn't exist."""
-    try:
-        with open(filename, "r") as f:
-            hashed_password = f.readline().strip()
-            return hashed_password
-    except FileNotFoundError:
-        print("Password file not found. Please set a password.")
-        set_password(filename)  # Call the function to create and save the password hash
-        return get_password_hash(filename)  # Call the function recursively to load the newly created password hash
+# Simulate a database -  IN A REAL APPLICATION, USE A SECURE DATABASE!
+try:
+    with open("users.json", "r") as f:
+        user_database = json.load(f)
+except FileNotFoundError:
+    user_database = {}
 
 
-def set_password(filename="password.hash"):
-    """Sets a new password, hashes it, and saves it to a file."""
-    while True:
-        password = getpass.getpass("Enter new password: ")
-        confirm_password = getpass.getpass("Confirm new password: ")
-        if password == confirm_password:
-            hashed_password = hashlib.sha256(password.encode()).hexdigest()  #Uses SHA256 for hashing
-            with open(filename, "w") as f:
-                f.write(hashed_password)
-            print("Password set successfully.")
-            break
-        else:
-            print("Passwords do not match. Please try again.")
+def check_password(username, password):
+    if username in user_database:
+        stored_hash = user_database[username]
+        # Hash the provided password using the same algorithm
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        return hashed_password == stored_hash
+    return False
 
 
-def check_credentials(username, password, hashed_password):
-    """Checks username and password against the stored hash."""
-    if username == "admin": #Still hardcodes username, this should be improved in real scenario.
-        user_hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        return user_hashed_password == hashed_password
-    else:
-        return False
-
-
-def main():
+def login():
     username = input("Username: ")
     password = getpass.getpass("Password: ")
-    stored_hash = get_password_hash()
-    if check_credentials(username, password, stored_hash):
+
+    if check_password(username, password):
         print("Login successful!")
     else:
-        print("Login failed.")
+        print("Invalid username or password.")
+
+
+def register():
+  username = input("Username: ")
+  if username in user_database:
+    print("Username already exists. Please choose a different one.")
+    return
+  password = getpass.getpass("Password: ")
+  hashed_password = hashlib.sha256(password.encode()).hexdigest()
+  user_database[username] = hashed_password
+  with open("users.json", "w") as f:
+      json.dump(user_database, f)
+  print("Registration successful!")
 
 
 if __name__ == "__main__":
-    main()
+    action = input("Login or Register? (login/register): ")
+    if action.lower() == "login":
+        login()
+    elif action.lower() == "register":
+        register()
+    else:
+        print("Invalid action.")
 
