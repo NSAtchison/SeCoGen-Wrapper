@@ -1,5 +1,5 @@
 import os
-from secureCodeGen import SecureCodeGen
+from secure_code_gen import SecureCodeGen
 
 def main():
     """
