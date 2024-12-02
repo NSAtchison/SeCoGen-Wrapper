@@ -190,7 +190,7 @@ class SecureCodeGen():
         # Save the AI's security report to a file in the output folder.
         self.save_security_report(response2, get_file_path(LLM_SECURITY_REPORT_FILE_NAME))
 
-        print("Generated code, Bandit analysis, and LLM security report are located in the output folder.")
+        print("\nGenerated code, Bandit analysis, and LLM security report are located in the output folder.\n")
 
     def save_security_report(self, response_text, output_file):
         """

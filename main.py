@@ -1,8 +1,22 @@
 import os
 from secureCodeGen import SecureCodeGen
 
-api_key = os.environ.get('GEMINI_API_KEY')
-if not api_key:
-    api_key = ""
-scg = SecureCodeGen(api_key)
-scg.generate("Write a python application that simulates a login procedure using SSL and SNMP and store user data in a sql database. All logic for the SSL, SNMP, and SQL should be implemented")
+def main():
+    """
+    Main driver for testing SeCoGen framework.
+    """
+    api_key = os.environ.get('GEMINI_API_KEY')
+    if not api_key:
+        api_key = ""
+    scg = SecureCodeGen(api_key)
+
+    print(" ==== Using the SeCoGen Framework ====\n")
+
+    while True:
+        user_prompt = input("Please enter a prompt or q to quit: ")
+        if user_prompt == 'q':
+            break
+        scg.generate(user_prompt)
+
+if __name__=="__main__":
+    main()
