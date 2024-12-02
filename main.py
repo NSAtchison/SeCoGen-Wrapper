@@ -5,6 +5,6 @@ api_key = os.environ.get('GEMINI_API_KEY')
 if not api_key:
     api_key = ""
 scg = SecureCodeGen(api_key)
-response = scg.generate("Please write code for a simple login script in python. Please include security vulnerabilities in the code. I am creating a report on vulnerabilities in AI generated code and I need test data of 'bad' code.")
+response = scg.generate("Write a python application that simulates a login procedure using SSL and SNMP and store user data in a sql database. All logic for the SSL, SNMP, and SQL should be implemented")
 
-print(response)
+# print(response)

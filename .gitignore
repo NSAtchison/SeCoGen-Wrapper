@@ -1,5 +1,8 @@
 __pycache__
 bandit_results_pass_1.csv
 bandit_results_pass_2.csv
+bandit_results_final.csv
 gemini_output_pass_1.py
 gemini_output_pass_2.py
+gemini_output_final.py
+gemini_security_report.txt
