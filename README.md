@@ -6,6 +6,8 @@ School of Electrical Engineering & Computer Science, Washington State University
 
 SeCoGen is a framework that integrates automatic security analysis, data sets, and prompt modifcation into LLM API prompting. The goal of this framework is to emphasize the importance of security when it comes to LLM generated code, provide more secure code to users of LLMs for this purpose without increasing the workload, and provide information to users about the security of the code they are generating. SeCoGen serves as a proof of concept that LLM code generation security can be improved with a cohesive, modular framework.
 
+The experiment_results directory contains the results of a set of experiments conducted as a precursor to this project. The analysis of this results motivated the creation of SeCoGen.
+
 ## Prerequisites:
 Generate a Google Gemini API key at the link below, and store as an environment variable titled GEMINI_API_KEY.
 
