@@ -4,7 +4,7 @@ Created by Zayn Abou-Harb, Nathan Atchison, Hunter Smith, and Sebastian Smith.
 
 School of Electrical Engineering & Computer Science, Washington State University, Pullman, WA.
 
-SeCoGen is a framework that integrates automatic security analysis, data sets, and prompt modifcation into LLM API prompting. The goal of this framework is to emphasize the importance of security when it comes to LLM generated code, provide more secure code to users of LLMs for this purpose without increasing the workload, and provide information to users about the security of the code they are generating. SeCoGen serves as a proof of concept that LLM code generation security can be improved with a cohesive, modular framework.
+SeCoGen is a framework that integrates automatic security analysis, data sets, and prompt modification into LLM API prompting. The goal of this framework is to emphasize the importance of security when it comes to LLM generated code, provide more secure code to users of LLMs for this purpose without increasing the workload, and provide information to users about the security of the code they are generating. SeCoGen serves as a proof of concept that LLM code generation security can be improved with a cohesive, modular framework.
 
 The [experiment_results](https://github.com/NSAtchison/SeCoGen-Wrapper/tree/main/experiment_results) directory contains the results of a set of experiments conducted as a precursor to this product. The analysis of these results motivated the creation of SeCoGen.
 
