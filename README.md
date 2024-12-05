@@ -8,6 +8,8 @@ SeCoGen is a framework that integrates automatic security analysis, data sets, a
 
 The [experiment_results](https://github.com/NSAtchison/SeCoGen-Wrapper/tree/main/experiment_results) directory contains the results of a set of experiments conducted as a precursor to this product. The analysis of these results motivated the creation of SeCoGen.
 
+The [wrapper_test](https://github.com/NSAtchison/SeCoGen-Wrapper/tree/main/wrapper_Test) directory contains the results of the test run of SeCoGen described in the project's final presentation.
+
 ## Prerequisites:
 Generate a Google Gemini API key at the link below, and store as an environment variable titled GEMINI_API_KEY.
 
